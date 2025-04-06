@@ -11,10 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CQRS\" />
-    <Folder Include="DTOS\" />
-    <Folder Include="Helpers\" />
-    <Folder Include="Services\" />
+    <Folder Include="CQRS\Exam\commands\" />
   </ItemGroup>
 
   <ItemGroup>
