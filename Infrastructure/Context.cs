@@ -14,23 +14,11 @@ namespace Infrastructure
         public Context(DbContextOptions<Context> options) : base(options)
         {
         }
-        public DbSet<Domain.Models.BaseModel> BaseModels { get; set; } // Example DbSet, replace with your actual entities
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-           
-                  //optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=FoodAppSystem;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=true;")
-                   optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=foodApp;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=true;")
-                  .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
-                 .LogTo(log => Debug.WriteLine(log), LogLevel.Information)
-                 .EnableSensitiveDataLogging();
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Configure your entities here
-            // For example:
-            // modelBuilder.Entity<YourEntity>().ToTable("YourTableName");
+           
         }
     }
 }

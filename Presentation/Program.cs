@@ -22,12 +22,12 @@ namespace Presentation
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             // **Register DbContext**
-            //builder.Services.AddDbContext<Context>(options =>
-            //             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
-            //                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
-            //                .LogTo(log => Debug.WriteLine(log), LogLevel.Information)
-            //                .EnableSensitiveDataLogging()
-            //             );
+            builder.Services.AddDbContext<Context>(options =>
+                         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+                            .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+                            .LogTo(log => Debug.WriteLine(log), LogLevel.Information)
+                            .EnableSensitiveDataLogging()
+                         );
 
 
 
