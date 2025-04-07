@@ -18,11 +18,6 @@ namespace Infrastructure
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //  optionsBuilder.UseSqlServer(@"Data source =(localdb)\MSSQLLocalDB; initial catalog = HotelManagementSystem; integrated security = true; trust server certificate=true")
-            optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=foodApp;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=true;")
-                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
-                 .LogTo(log => Debug.WriteLine(log), LogLevel.Information)
-                 .EnableSensitiveDataLogging();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

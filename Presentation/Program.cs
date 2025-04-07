@@ -1,6 +1,10 @@
 
 using AutoMapper;
+using Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Presentation.MiddleWares;
+using System.Diagnostics;
 
 namespace Presentation
 {
@@ -13,6 +17,13 @@ namespace Presentation
             // Add services to the container.
 
             builder.Services.AddControllers();
+            builder.Services.AddDbContext<Context>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+                   .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+                   .EnableSensitiveDataLogging()
+                   .LogTo(log => Debug.WriteLine(log), LogLevel.Information));
+
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
