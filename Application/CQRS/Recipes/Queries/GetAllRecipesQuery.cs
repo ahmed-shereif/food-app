@@ -4,6 +4,7 @@ using Application.Helpers.MappingProfile;
 using AutoMapper.QueryableExtensions;
 using Domain.Enums;
 using Domain.Models;
+using Domain.Repositories;
 using Infrastructure.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -18,9 +19,9 @@ namespace Application.CQRS.Recipes.Queries
     public record GetAllRecipesQuery(): IRequest<ResponseViewModel<IEnumerable<GetAllRecipesDto>>>;
     public class GetAllRecipesQueryHandler : IRequestHandler<GetAllRecipesQuery, ResponseViewModel<IEnumerable<GetAllRecipesDto>>>
     {
-        private readonly GeneralRepository<Recipe> _generalRepo;
+        private readonly IGeneralRepository<Recipe> _generalRepo;
 
-        public GetAllRecipesQueryHandler(GeneralRepository<Recipe> generalRepo)
+        public GetAllRecipesQueryHandler(IGeneralRepository<Recipe> generalRepo)
         {
             _generalRepo = generalRepo;
         }

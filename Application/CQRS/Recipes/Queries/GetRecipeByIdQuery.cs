@@ -3,6 +3,7 @@ using Application.Helpers;
 using Application.Helpers.MappingProfile;
 using Domain.Enums;
 using Domain.Models;
+using Domain.Repositories;
 using Infrastructure.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -18,10 +19,10 @@ namespace Application.CQRS.Recipes.Queries
 
     public class GetRecipeByIdQueryHandler : IRequestHandler<GetRecipeByIdQuery, ResponseViewModel<GetRecipeDto>>
     {
-        private readonly GeneralRepository<Recipe> _generalRepo;
+        private readonly IGeneralRepository<Recipe> _generalRepo;
 
         //constructor 
-        public GetRecipeByIdQueryHandler(GeneralRepository<Recipe> generalRepo) {
+        public GetRecipeByIdQueryHandler(IGeneralRepository<Recipe> generalRepo) {
             _generalRepo = generalRepo;
         }
 

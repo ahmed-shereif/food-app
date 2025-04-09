@@ -1,6 +1,7 @@
 ﻿using Application.Helpers;
 using Domain.Enums;
 using Domain.Models;
+using Domain.Repositories;
 using Infrastructure.Repositories;
 using MediatR;
 using System;
@@ -14,9 +15,9 @@ namespace Application.CQRS.Recipes.Commands
     public record RemoveRecipeCommand(int id):IRequest<ResponseViewModel<bool>>;
     public class RemoveRecipeCommandHandler : IRequestHandler<RemoveRecipeCommand,ResponseViewModel<bool>>
     {
-        private readonly GeneralRepository<Recipe> _generalRepo;
+        private readonly IGeneralRepository<Recipe> _generalRepo;
 
-        public RemoveRecipeCommandHandler(GeneralRepository<Recipe> generalRepo) {
+        public RemoveRecipeCommandHandler(IGeneralRepository<Recipe> generalRepo) {
             _generalRepo = generalRepo;
         }
         public async Task<ResponseViewModel<bool>> Handle(RemoveRecipeCommand request, CancellationToken cancellationToken)

@@ -41,8 +41,12 @@ namespace Presentation
              builder.Services.AddScoped(typeof(IGeneralRepository<>), typeof(GeneralRepository<>));
          
 
-            builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
-            builder.Services.AddAutoMapper(typeof(Program));
+            builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Application.AssemblyMarker).Assembly));
+            builder.Services.AddAutoMapper(
+                typeof(Program).Assembly,
+                typeof(Application.AssemblyMarker).Assembly
+            );
+
             var app = builder.Build();
 
 
@@ -51,7 +55,7 @@ namespace Presentation
             app.UseMiddleware<GlobalExceptionMiddleware>();
             app.UseMiddleware<TransactionMiddleware>();
 
-           // AutoMapperService.Mapper = app.Services.GetService<IMapper>();
+            AutoMapperService.Mapper = app.Services.GetService<IMapper>();
             // Other middleware
 
 

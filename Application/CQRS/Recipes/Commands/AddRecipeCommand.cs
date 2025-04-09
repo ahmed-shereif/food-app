@@ -3,6 +3,7 @@ using Application.Helpers;
 using Application.Helpers.MappingProfile;
 using Domain.Enums;
 using Domain.Models;
+using Domain.Repositories;
 using Infrastructure.Repositories;
 using MediatR;
 using System;
@@ -16,9 +17,9 @@ namespace Application.CQRS.Recipes.Commands
     public record AddRecipeCommand(AddRecipeDto recipeDto):IRequest<ResponseViewModel<bool>>;
     public class AddRecipeCommandHandler : IRequestHandler<AddRecipeCommand, ResponseViewModel<bool>>
     {
-        private readonly GeneralRepository<Recipe> _generalRepo;
+        private readonly IGeneralRepository<Recipe> _generalRepo;
 
-        public AddRecipeCommandHandler(GeneralRepository<Recipe> generalRepo)
+        public AddRecipeCommandHandler(IGeneralRepository<Recipe> generalRepo)
         {
             _generalRepo = generalRepo;
         }

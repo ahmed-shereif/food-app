@@ -11,12 +11,13 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
-    public class GeneralRepository<T> : IGeneralRepository<T> where T :BaseModel
+    public class GeneralRepository<T> : IGeneralRepository<T> where T : BaseModel
     {
         private readonly Context _context;
         protected DbSet<T> _dbSet;
 
-        public GeneralRepository(Context context) {
+        public GeneralRepository(Context context)
+        {
             _context = context;
             _dbSet = _context.Set<T>();
 
@@ -49,7 +50,7 @@ namespace Infrastructure.Repositories
         public async Task<T> GetByIdAsync(int id)
         {
             return await _dbSet
-               .Where(c =>  c.Id == id)
+               .Where(c => c.Id == id)
                .FirstOrDefaultAsync();
         }
 
@@ -110,11 +111,11 @@ namespace Infrastructure.Repositories
 
         public async Task<bool> Delete(int id)
         {
-           
-                var entity = await GetByIdWithTracking(id);
-                entity.IsDeleted = true;
-                return true;
-           
+
+            var entity = await GetByIdWithTracking(id);
+            entity.IsDeleted = true;
+            return true;
+
         }
 
         public void SaveChanges()

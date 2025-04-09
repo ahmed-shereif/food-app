@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Repositories
 {
-   public interface IGeneralRepository<T> where T : BaseModel
+    public interface IGeneralRepository<T> where T : BaseModel
     {
         //Add
         Task<T> AddAsync(T model);
@@ -27,7 +27,8 @@ namespace Domain.Repositories
         Task<bool> Delete(int id);
 
         Task<bool> GetByIdAsyncAny(int id);
-
+        Task<int> SaveChangesAsync();
+ 
 
     }
 }
