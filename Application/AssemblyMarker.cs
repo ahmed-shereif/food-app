@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.CQRS.Exam.query
+namespace Application
 {
-    internal class getExam
+    public class AssemblyMarker
     {
     }
 }
