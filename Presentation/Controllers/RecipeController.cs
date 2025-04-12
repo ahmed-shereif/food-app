@@ -3,15 +3,19 @@ using Application.CQRS.Recipes.Queries;
 using Application.DTOS.RecipeDto;
 using Application.Helpers;
 using Application.Helpers.MappingProfile;
+using AutoMapper.Features;
 using Azure;
 using Domain.Enums;
 using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
+
 using Microsoft.AspNetCore.Mvc;
 using Presentation.ViewModels.RecipeViewModel;
 using System.Threading.Tasks;
+
+
 
 namespace Presentation.Controllers
 {
@@ -83,11 +87,14 @@ namespace Presentation.Controllers
 
         }
 
+
+        #endregion
+        #region Get Recipes by Name, Tag or Category
         [HttpGet]
         public ResponseViewModel<IEnumerable<GetRecipesByNameOrTagOrCategoryViewModel>> GetRecipesByNameOrTagOrCategory([FromQuery] GetRecipesByNameOrTagOrCategoryParamsViewModel getRecipesByNameOrTagOrCategoryViewModel)
         {
             var recipes = _mediator.Send(new GetRecipesByNameOrTagOrCategoryQuery(getRecipesByNameOrTagOrCategoryViewModel.Map<GetRecipesByNameOrTagOrCategoryParamsDTO>())).Result.Data;
-            IEnumerable<GetRecipesByNameOrTagOrCategoryViewModel> mappedRecipes =  recipes.AsQueryable().Project<GetRecipesByNameOrTagOrCategoryViewModel>();
+            IEnumerable<GetRecipesByNameOrTagOrCategoryViewModel> mappedRecipes = recipes.AsQueryable().Project<GetRecipesByNameOrTagOrCategoryViewModel>();
 
             if (mappedRecipes is null)
             {
