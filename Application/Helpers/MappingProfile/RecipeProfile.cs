@@ -15,7 +15,9 @@ namespace Application.Helpers.MappingProfile
             CreateMap<Recipe,GetRecipeDto>().ReverseMap();
             CreateMap<Recipe,GetAllRecipesDto>().ReverseMap();
             CreateMap<Recipe,AddRecipeDto>().ReverseMap();
-          
+            CreateMap<Recipe, GetRecipesByNameOrTagOrCategoryDTO>().ReverseMap();
+
+
 
         }
     }

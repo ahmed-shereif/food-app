@@ -63,7 +63,7 @@ namespace Presentation.Controllers
 
             return ResponseViewModel<bool>.Success(true, "Recipe added successfully.");
         }
-
+        
         #endregion
 
         #region Get Recipe By Id 
@@ -80,6 +80,21 @@ namespace Presentation.Controllers
                 return ResponseViewModel<GetRecipeViewModel>.Failure(mapedRecipe, "cannot find recipe", ErrorCodeEnum.NotFound);
 
             return ResponseViewModel<GetRecipeViewModel>.Success(mapedRecipe, "Success");
+
+        }
+
+        [HttpGet]
+        public ResponseViewModel<IEnumerable<GetRecipesByNameOrTagOrCategoryViewModel>> GetRecipesByNameOrTagOrCategory([FromQuery] GetRecipesByNameOrTagOrCategoryParamsViewModel getRecipesByNameOrTagOrCategoryViewModel)
+        {
+            var recipes = _mediator.Send(new GetRecipesByNameOrTagOrCategoryQuery(getRecipesByNameOrTagOrCategoryViewModel.Map<GetRecipesByNameOrTagOrCategoryParamsDTO>())).Result.Data;
+            IEnumerable<GetRecipesByNameOrTagOrCategoryViewModel> mappedRecipes =  recipes.AsQueryable().Project<GetRecipesByNameOrTagOrCategoryViewModel>();
+
+            if (mappedRecipes is null)
+            {
+                return ResponseViewModel<IEnumerable<GetRecipesByNameOrTagOrCategoryViewModel>>.Failure(null, "Recipes not found", ErrorCodeEnum.NotFound);
+            }
+
+            return ResponseViewModel<IEnumerable<GetRecipesByNameOrTagOrCategoryViewModel>>.Success(mappedRecipes, "Success");
 
         }
         #endregion
