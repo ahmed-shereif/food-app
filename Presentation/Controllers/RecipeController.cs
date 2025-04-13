@@ -74,7 +74,7 @@ namespace Presentation.Controllers
         {
 
             var result = await _mediator.Send(new GetRecipeByIdQuery(id));
-            var mapedRecipe = result.Map<GetRecipeViewModel>();
+            var mapedRecipe = result.Data.Map<GetRecipeViewModel>();
 
             if (result.Data == null)
                 return ResponseViewModel<GetRecipeViewModel>.Failure(mapedRecipe, "cannot find recipe", ErrorCodeEnum.NotFound);
@@ -98,7 +98,7 @@ namespace Presentation.Controllers
 
             
     
-            var mappedData = result.Map<IEnumerable<GetAllRecipesViewModel>>();
+            var mappedData = result.Data.Map<IEnumerable<GetAllRecipesViewModel>>();
             return ResponseViewModel<IEnumerable<GetAllRecipesViewModel>>.Success(mappedData, "Success");
         }
         #endregion
