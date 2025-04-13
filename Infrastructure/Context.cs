@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Domain.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -13,11 +14,16 @@ namespace Infrastructure
     {
         public Context(DbContextOptions<Context> options) : base(options)
         {
+
         }
-        public DbSet<Domain.Models.BaseModel> BaseModels { get; set; } // Example DbSet, replace with your actual entities
+
+       //DB Sets
+        public DbSet<Recipe> Recipes { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+           
+                
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

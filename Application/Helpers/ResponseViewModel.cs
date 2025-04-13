@@ -1,11 +1,15 @@
-﻿
-using Domain.Enums;
-using Microsoft.AspNetCore.Http;
+﻿using Domain.Enums;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Presentation.ViewModels.ResponseVM
+namespace Application.Helpers
 {
     public class ResponseViewModel<T>
     {
+
         public bool IsSuccess { get; set; }
         public T? Data { get; set; }
         public ErrorCodeEnum StatusCode { get; set; }
