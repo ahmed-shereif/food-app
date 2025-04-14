@@ -1,10 +1,16 @@
 
+using Application.CQRS.Users.Registration;
+using Application.Helpers.MappingProfile;
 using AutoMapper;
+using Domain.Contracts;
 using Domain.Repositories;
 using Infrastructure;
+using Infrastructure.Authentication;
 using Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Presentation.MiddleWares;
+using Presentation.OptionsSetup;
 using System.Diagnostics;
 
 namespace Presentation
@@ -21,6 +27,8 @@ namespace Presentation
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddAutoMapper(typeof(Program));
+
             // **Register DbContext**
             builder.Services.AddDbContext<Context>(options =>
                          options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
@@ -29,11 +37,27 @@ namespace Presentation
                             .EnableSensitiveDataLogging()
                          );
 
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
+            builder.Services.ConfigureOptions<JwtOptionsSetup>();
 
+
+
+           // builder.Services.AddAutoMapper(typeof(Program));
 
             builder.Services.AddScoped(typeof(IGeneralRepository<>), typeof(GeneralRepository<>));
-            builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
-            var app = builder.Build();
+            builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+            builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
+
+
+            //builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(RegistrationCommandHandler).Assembly));
+            //  builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+            builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Application.AssemblyMarker).Assembly));
+            builder.Services.AddAutoMapper(
+                typeof(Program).Assembly,
+                typeof(Application.AssemblyMarker).Assembly);
+  
+
+              var app = builder.Build();
 
 
             // Add the global exception middleware
@@ -43,6 +67,7 @@ namespace Presentation
 
 
 
+            AutoMapperService.Mapper = app.Services.GetService<IMapper>();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -52,6 +77,8 @@ namespace Presentation
             }
 
             app.UseHttpsRedirection();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
