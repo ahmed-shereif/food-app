@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Application.Helpers.MappingProfile
 {
-    public static class AutoMapperService
+   public static class AutoMapperService
     {
         public static IMapper Mapper { get; set; }
 
