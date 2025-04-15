@@ -1,13 +1,16 @@
 
-using Application.CQRS.Recipes.Commands;
 using Application.Helpers.MappingProfile;
 using AutoMapper;
+using Domain.Contracts;
 using Domain.Repositories;
 using Infrastructure;
+using Infrastructure.Authentication;
 using Infrastructure.Repositories;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Presentation.MiddleWares;
+using Presentation.OptionsSetup;
 using System.Diagnostics;
 using System.Reflection.Metadata;
 
@@ -40,19 +43,36 @@ namespace Presentation
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddAutoMapper(typeof(Program));
+
+        
+
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
+            builder.Services.ConfigureOptions<JwtOptionsSetup>();
+
            
           
 
 
+           // builder.Services.AddAutoMapper(typeof(Program));
+
+            builder.Services.AddScoped(typeof(IGeneralRepository<>), typeof(GeneralRepository<>));
+            builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+            builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
+
+
+            //builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(RegistrationCommandHandler).Assembly));
+            //  builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+            builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Application.AssemblyMarker).Assembly));
+            builder.Services.AddAutoMapper(
+                typeof(Program).Assembly,
+                typeof(Application.AssemblyMarker).Assembly);
+  
 
              builder.Services.AddScoped(typeof(IGeneralRepository<>), typeof(GeneralRepository<>));
          
 
-            builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Application.AssemblyMarker).Assembly));
-            builder.Services.AddAutoMapper(
-                typeof(Program).Assembly,
-                typeof(Application.AssemblyMarker).Assembly
-            );
+      
 
             var app = builder.Build();
 
@@ -63,7 +83,6 @@ namespace Presentation
             app.UseMiddleware<TransactionMiddleware>();
 
             AutoMapperService.Mapper = app.Services.GetService<IMapper>();
-            // Other middleware
 
 
 
@@ -76,6 +95,8 @@ namespace Presentation
             }
 
             app.UseHttpsRedirection();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

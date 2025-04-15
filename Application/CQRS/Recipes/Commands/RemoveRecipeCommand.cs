@@ -38,7 +38,7 @@ namespace Application.CQRS.Recipes.Commands
 
                 return ResponseViewModel<bool>.Success(true, "Recipe deleted successfully.");
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 
                 return ResponseViewModel<bool>.Failure(false, "An error occurred while deleting the recipe.", ErrorCodeEnum.ServerError);

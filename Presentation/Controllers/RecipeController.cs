@@ -1,4 +1,5 @@
-﻿using Application.CQRS.Recipes.Commands;
+﻿
+using Application.CQRS.Recipes.Commands;
 using Application.CQRS.Recipes.Queries;
 using Application.DTOS.RecipeDto;
 using Application.Helpers;
@@ -26,25 +27,6 @@ namespace Presentation.Controllers
             _mediator = mediator;
         }
 
-        //[HttpPost]
-        //public async Task<ResponseViewModel<AddRecipeViewModel>> AddRecipe([FromBody] AddRecipeDto recipeDto)
-        //{
-        //    var result = await _mediator.Send(new AddRecipeCommand(recipeDto));
-
-        //    if (!result.IsSuccess)
-        //        return 
-        //            ResponseViewModel<AddRecipeViewModel>.Failure(
-        //                null,
-        //                result.Message,
-        //                result.StatusCode);
-
-        //    // Map result.Data (AddRecipeDto) to AddRecipeViewModel
-        //  //  var viewModel = AutoMapperService.Mapper.Map<AddRecipeViewModel>(result.Data);
-        //  var viewModel = recipeDto.Map<AddRecipeViewModel>();
-
-
-        //    return ResponseViewModel<AddRecipeViewModel>.Success(viewModel, "Recipe added successfully.");
-        //}
         #region Add Recipe
         [HttpPost]
         public async Task<ResponseViewModel<bool>> AddRecipe([FromBody] AddRecipeViewModel recipeViewModel)
@@ -74,7 +56,7 @@ namespace Presentation.Controllers
         {
 
             var result = await _mediator.Send(new GetRecipeByIdQuery(id));
-            var mapedRecipe = result.Map<GetRecipeViewModel>();
+            var mapedRecipe = result.Data.Map<GetRecipeViewModel>();
 
             if (result.Data == null)
                 return ResponseViewModel<GetRecipeViewModel>.Failure(mapedRecipe, "cannot find recipe", ErrorCodeEnum.NotFound);
@@ -98,7 +80,7 @@ namespace Presentation.Controllers
 
             
     
-            var mappedData = result.Map<IEnumerable<GetAllRecipesViewModel>>();
+            var mappedData = result.Data.Map<IEnumerable<GetAllRecipesViewModel>>();
             return ResponseViewModel<IEnumerable<GetAllRecipesViewModel>>.Success(mappedData, "Success");
         }
         #endregion
