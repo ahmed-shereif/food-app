@@ -1,5 +1,4 @@
 ﻿using Application.DTOS.UserDtos;
-using Presentation.ViewModels;
 using Application.ViewModels;
 using AutoMapper;
 using Domain.Models;

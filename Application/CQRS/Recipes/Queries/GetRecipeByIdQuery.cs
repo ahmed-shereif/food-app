@@ -4,7 +4,6 @@ using Application.Helpers.MappingProfile;
 using Domain.Enums;
 using Domain.Models;
 using Domain.Repositories;
-using Infrastructure.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;

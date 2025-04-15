@@ -1,6 +1,5 @@
 ﻿using Application.DTOS.RecipeDto;
 using AutoMapper;
-using Domain.Models;
 using Presentation.ViewModels.RecipeViewModel;
 
 namespace Presentation.MappingProfile
