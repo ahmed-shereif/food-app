@@ -54,10 +54,10 @@ namespace Infrastructure.Repositories
                .FirstOrDefaultAsync();
         }
 
-        public async Task<bool> GetByIdAsyncAny(int id)
+        public async Task<bool> GetAsyncAny(Expression<Func<T, bool>> predicate)
         {
             return await _dbSet
-               .Where(c => c.Id == id)
+               .Where(predicate)
                .AnyAsync();
         }
 
@@ -128,6 +128,6 @@ namespace Infrastructure.Repositories
             return count;
         }
 
-
+      
     }
 }

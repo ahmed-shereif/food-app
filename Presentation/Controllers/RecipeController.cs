@@ -1,4 +1,5 @@
-﻿using Application.CQRS.Recipes.Commands;
+﻿
+using Application.CQRS.Recipes.Commands;
 using Application.CQRS.Recipes.Queries;
 using Application.DTOS.RecipeDto;
 using Application.Helpers;
@@ -26,7 +27,6 @@ namespace Presentation.Controllers
             _mediator = mediator;
         }
 
-       
         #region Add Recipe
         [HttpPost]
         public async Task<ResponseViewModel<bool>> AddRecipe([FromBody] AddRecipeViewModel recipeViewModel)
