@@ -1,7 +1,7 @@
 ﻿using Application.DTOS.UserDtos;
+using Application.Helpers;
 using Application.ViewModels;
 using MediatR;
-using Presentation.ViewModels.ResponseVM;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,11 +1,10 @@
 ﻿using Application.DTOS.UserDtos;
-using Application.Helpers.MappingProfile;
+using Application.Helpers;
 using Domain.Contracts;
 using Domain.Enums;
 using Domain.Models;
 using Domain.Repositories;
 using MediatR;
-using Presentation.ViewModels.ResponseVM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Application.CQRS.Users.Login
 {
-    public class LoginCommandHandler : IRequestHandler<LoginCommand, ResponseViewModel<LoginUserDto>>
+    public class LoginCommandHandler : IRequestHandler<LoginCommand,ResponseViewModel <LoginUserDto>>
     {
         private readonly IGeneralRepository<User> _generalRepository;
       //  private readonly IJwtProvider _jwtProvider;
@@ -31,7 +30,7 @@ namespace Application.CQRS.Users.Login
 
             if (user is null || !BCrypt.Net.BCrypt.Verify(request.LoginUser.Password, user.Password))
             {
-                return ResponseViewModel<LoginUserDto>.Failure(null, "ssss", ErrorCodeEnum.FailerDeleteRoom);
+                return ResponseViewModel<LoginUserDto>.Failure(null, "ssss", ErrorCodeEnum.BadRequest);
 
             }
        //    string token =  _jwtProvider.GenerateToken(user);

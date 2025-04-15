@@ -1,7 +1,4 @@
 
-using Application.CQRS.Recipes.Commands;
-using Application.Helpers.MappingProfile;
-using Application.CQRS.Users.Registration;
 using Application.Helpers.MappingProfile;
 using AutoMapper;
 using Domain.Contracts;
@@ -41,13 +38,7 @@ namespace Presentation
             builder.Services.AddSwaggerGen();
             builder.Services.AddAutoMapper(typeof(Program));
 
-            // **Register DbContext**
-            builder.Services.AddDbContext<Context>(options =>
-                         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
-                            .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
-                            .LogTo(log => Debug.WriteLine(log), LogLevel.Information)
-                            .EnableSensitiveDataLogging()
-                         );
+        
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
             builder.Services.ConfigureOptions<JwtOptionsSetup>();
@@ -71,15 +62,10 @@ namespace Presentation
                 typeof(Application.AssemblyMarker).Assembly);
   
 
-              var app = builder.Build();
              builder.Services.AddScoped(typeof(IGeneralRepository<>), typeof(GeneralRepository<>));
          
 
-            builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Application.AssemblyMarker).Assembly));
-            builder.Services.AddAutoMapper(
-                typeof(Program).Assembly,
-                typeof(Application.AssemblyMarker).Assembly
-            );
+      
 
             var app = builder.Build();
 
@@ -90,11 +76,9 @@ namespace Presentation
             app.UseMiddleware<TransactionMiddleware>();
 
             AutoMapperService.Mapper = app.Services.GetService<IMapper>();
-            // Other middleware
 
 
 
-            AutoMapperService.Mapper = app.Services.GetService<IMapper>();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

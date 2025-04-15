@@ -1,10 +1,10 @@
 ﻿using Application.DTOS.UserDtos;
+using Application.Helpers;
 using Application.Helpers.MappingProfile;
 using Domain.Enums;
 using Domain.Models;
 using Domain.Repositories;
 using MediatR;
-using Presentation.ViewModels.ResponseVM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +28,7 @@ namespace Application.CQRS.Users.Registration
 
             if (user != null)
             {
-                ResponseViewModel<CreateUserDto>.Failure(null, "ssss", ErrorCodeEnum.FailerDeleteRoom);
+                ResponseViewModel<CreateUserDto>.Failure(null, "ssss", ErrorCodeEnum.AlreadyExist);
             };
             //   var hashingPassword = new passwordHasher<User>.PasswordHasher();
             var mapp = request.user;
@@ -43,7 +43,7 @@ namespace Application.CQRS.Users.Registration
             }
             else
             {
-             return   ResponseViewModel<CreateUserDto>.Failure(null, "ssss", ErrorCodeEnum.FailerDeleteRoom);
+             return   ResponseViewModel<CreateUserDto>.Failure(null, "ssss", ErrorCodeEnum.BadRequest);
             }
         }
     }
