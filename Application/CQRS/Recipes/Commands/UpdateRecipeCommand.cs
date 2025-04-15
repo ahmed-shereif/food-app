@@ -33,7 +33,7 @@ namespace Application.CQRS.Recipes.Commands
             }
            // Map Dto to recipe
             var updatedRecipe = request.recipeDto.Map<Recipe>();
-           // updatedEntity.Id = existingRecipe.Id;
+           
 
             _generalRepository.UpdateInclude(updatedRecipe,
            nameof(Recipe.Name),

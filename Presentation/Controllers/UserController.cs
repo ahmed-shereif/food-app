@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Application.CQRS.LoginOrchestrator;
 using Application.Helpers;
 using Presentation.ViewModels.UserViewModels;
+using Application.CQRS.Users.Commands;
 
 namespace Presentation.Controllers
 {
@@ -54,5 +55,48 @@ namespace Presentation.Controllers
 
             return ResponseViewModel<LoginOrchestratorDto>.Success(result, "welcome Back");
         }
+
+
+
+        //[HttpPost]
+        //public async Task<ResponseViewModel<string>> ForgetPassword(string Email)
+        //{
+
+        //    var result = await _mediator.Send(new ForgetPasswordCommand(Email));
+
+        //    return ResponseViewModel<string>.Success(result.Data, "otpSent");
+        //}
+
+
+        [HttpPost]
+        public async Task<ResponseViewModel<string>> ForgetPassword(string Email)
+        {
+            
+            if (string.IsNullOrWhiteSpace(Email))
+            {
+                return ResponseViewModel<string>.Failure(
+                    null,
+                    "Email is required.",
+                    ErrorCodeEnum.BadRequest);
+            }
+
+
+           
+            var result = await _mediator.Send(new ForgetPasswordCommand(Email));
+
+            
+            if (result.Data == null)
+            {
+                return ResponseViewModel<string>.Failure(
+                    null,
+                    "Email not registered.",
+                    ErrorCodeEnum.NotFound);
+            }
+
+            return ResponseViewModel<string>.Success(result.Data, "OTP sent.");
+        }
+
+       
+     
     }
 }
