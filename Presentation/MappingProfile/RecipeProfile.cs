@@ -1,6 +1,5 @@
 ﻿using Application.DTOS.RecipeDto;
 using AutoMapper;
-using Domain.Models;
 using Presentation.ViewModels.RecipeViewModel;
 
 namespace Presentation.MappingProfile
@@ -12,7 +11,7 @@ namespace Presentation.MappingProfile
             CreateMap<AddRecipeViewModel, AddRecipeDto>().ReverseMap();
             CreateMap<GetRecipeViewModel, GetRecipeDto>().ReverseMap();
             CreateMap<GetAllRecipesViewModel, GetAllRecipesDto>().ReverseMap();
-            CreateMap<GetRecipesByNameOrTagOrCategoryParamsViewModel, GetRecipesByNameOrTagOrCategoryParamsDTO>().ReverseMap();
+            CreateMap<GetRecipesByNameOrTagOrCategoryParamsViewModel, GetRecipesByNameOrTagOrCategoryParams>().ReverseMap();
             CreateMap<GetRecipesByNameOrTagOrCategoryDTO, GetRecipesByNameOrTagOrCategoryViewModel>().ReverseMap();
 
         }

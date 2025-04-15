@@ -20,17 +20,10 @@ namespace Infrastructure
        //DB Sets
         public DbSet<Recipe> Recipes { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-           
-                
-        }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            // Configure your entities here
-            // For example:
-            // modelBuilder.Entity<YourEntity>().ToTable("YourTableName");
-        }
+
+
+     
+        public DbSet<User> Users { get; set; }
     }
 }

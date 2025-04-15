@@ -1,6 +1,6 @@
-﻿namespace Presentation.ViewModels.RecipeViewModel
+﻿namespace Application.DTOS.RecipeDto
 {
-    public class GetRecipesByNameOrTagOrCategoryParamsViewModel
+    public class GetRecipesByNameOrTagOrCategoryParams
     {
         public string? Name { get; set; }
         public string? Tag { get; set; }
