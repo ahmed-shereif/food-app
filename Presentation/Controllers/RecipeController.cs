@@ -26,25 +26,7 @@ namespace Presentation.Controllers
             _mediator = mediator;
         }
 
-        //[HttpPost]
-        //public async Task<ResponseViewModel<AddRecipeViewModel>> AddRecipe([FromBody] AddRecipeDto recipeDto)
-        //{
-        //    var result = await _mediator.Send(new AddRecipeCommand(recipeDto));
-
-        //    if (!result.IsSuccess)
-        //        return 
-        //            ResponseViewModel<AddRecipeViewModel>.Failure(
-        //                null,
-        //                result.Message,
-        //                result.StatusCode);
-
-        //    // Map result.Data (AddRecipeDto) to AddRecipeViewModel
-        //  //  var viewModel = AutoMapperService.Mapper.Map<AddRecipeViewModel>(result.Data);
-        //  var viewModel = recipeDto.Map<AddRecipeViewModel>();
-
-
-        //    return ResponseViewModel<AddRecipeViewModel>.Success(viewModel, "Recipe added successfully.");
-        //}
+       
         #region Add Recipe
         [HttpPost]
         public async Task<ResponseViewModel<bool>> AddRecipe([FromBody] AddRecipeViewModel recipeViewModel)
@@ -83,6 +65,7 @@ namespace Presentation.Controllers
 
         }
         #endregion
+
         #region Get All Recipes
 
         [HttpGet]
@@ -115,6 +98,25 @@ namespace Presentation.Controllers
 
             return ResponseViewModel<bool>.Failure(result.Data, result.Message, ErrorCodeEnum.FailerDelete);
 
+        }
+        #endregion
+
+        #region
+        [HttpPut]
+        public async Task<ResponseViewModel<bool>> UpdateRecipe(int id,UpdateRecipeViewModel viewModel)
+        {
+            if (id != viewModel.id )
+            {
+                return ResponseViewModel<bool>.Failure(false, "ID mismatch ", ErrorCodeEnum.BadRequest);
+            }
+
+            // Map ViewModel to Dto
+            var mappedRecipe = viewModel.Map<UpdateRecipeDto>();
+
+          
+            var result = await _mediator.Send(new UpdateRecipeCommand(mappedRecipe));
+
+            return ResponseViewModel<bool>.Success(true, "recipe Updated Success");
         }
         #endregion
 
