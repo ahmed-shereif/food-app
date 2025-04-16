@@ -58,10 +58,10 @@ namespace Presentation.Controllers
         }
 
 
+        #region Forget Password
 
-
-        [Authorize]
-        [HttpPost]
+       // [Authorize]
+        [HttpPost("forget-password")]
         public async Task<ResponseViewModel<string>> ForgetPassword(string Email)
         {
 
@@ -89,7 +89,24 @@ namespace Presentation.Controllers
             return ResponseViewModel<string>.Success(result.Data, "OTP sent.");
         }
 
+        #endregion
 
+
+
+        #region Reset Password
+
+        [HttpPost("reset-password")]
+        public async Task<ResponseViewModel<bool>> ResetPassword( ResetPasswordViewModel model)
+        {
+            var result = await _mediator.Send(new ResetPasswordCommand(model.Email, model.OTP, model.NewPassword));
+            if (result==null)
+            {
+                return ResponseViewModel<bool>.Failure(false, "Failed To rest Password");
+
+            }
+            return ResponseViewModel<bool>.Success(true, "Password reset successfully");
+        }
+        #endregion
 
     }
 }
