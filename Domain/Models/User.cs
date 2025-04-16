@@ -14,9 +14,7 @@ namespace Domain.Models
         public string Password { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
-        public string OTPSecretKey { get; set; } 
-        public int Number {  get; set; }
-
+        public string? OTPSecretKey { get; set; } 
         public Role Role { get; set; }
 
     }

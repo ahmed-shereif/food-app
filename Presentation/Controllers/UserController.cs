@@ -12,6 +12,7 @@ using Application.CQRS.LoginOrchestrator;
 using Application.Helpers;
 using Presentation.ViewModels.UserViewModels;
 using Application.CQRS.Users.Commands;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Presentation.Controllers
 {
@@ -58,20 +59,12 @@ namespace Presentation.Controllers
 
 
 
-        //[HttpPost]
-        //public async Task<ResponseViewModel<string>> ForgetPassword(string Email)
-        //{
 
-        //    var result = await _mediator.Send(new ForgetPasswordCommand(Email));
-
-        //    return ResponseViewModel<string>.Success(result.Data, "otpSent");
-        //}
-
-
+        [Authorize]
         [HttpPost]
         public async Task<ResponseViewModel<string>> ForgetPassword(string Email)
         {
-            
+
             if (string.IsNullOrWhiteSpace(Email))
             {
                 return ResponseViewModel<string>.Failure(
@@ -81,10 +74,10 @@ namespace Presentation.Controllers
             }
 
 
-           
+
             var result = await _mediator.Send(new ForgetPasswordCommand(Email));
 
-            
+
             if (result.Data == null)
             {
                 return ResponseViewModel<string>.Failure(
@@ -96,7 +89,7 @@ namespace Presentation.Controllers
             return ResponseViewModel<string>.Success(result.Data, "OTP sent.");
         }
 
-       
-     
+
+
     }
 }
