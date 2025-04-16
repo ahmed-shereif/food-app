@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 using Application.CQRS.LoginOrchestrator;
 using Application.Helpers;
 using Presentation.ViewModels.UserViewModels;
+using Application.CQRS.Users.Commands;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Presentation.Controllers
 {
@@ -54,5 +56,57 @@ namespace Presentation.Controllers
 
             return ResponseViewModel<LoginOrchestratorDto>.Success(result, "welcome Back");
         }
+
+
+        #region Forget Password
+
+       // [Authorize]
+        [HttpPost("forget-password")]
+        public async Task<ResponseViewModel<string>> ForgetPassword(string Email)
+        {
+
+            if (string.IsNullOrWhiteSpace(Email))
+            {
+                return ResponseViewModel<string>.Failure(
+                    null,
+                    "Email is required.",
+                    ErrorCodeEnum.BadRequest);
+            }
+
+
+
+            var result = await _mediator.Send(new ForgetPasswordCommand(Email));
+
+
+            if (result.Data == null)
+            {
+                return ResponseViewModel<string>.Failure(
+                    null,
+                    "Email not registered.",
+                    ErrorCodeEnum.NotFound);
+            }
+
+            return ResponseViewModel<string>.Success(result.Data, "OTP sent.");
+        }
+
+        #endregion
+
+
+
+        #region Reset Password
+
+        [HttpPost("reset-password")]
+        public async Task<ResponseViewModel<bool>> ResetPassword( ResetPasswordViewModel model)
+        {
+            var result = await _mediator.Send(new ResetPasswordCommand(model.Email, model.OTP, model.NewPassword));
+            if (result==null)
+            {
+                return ResponseViewModel<bool>.Failure(false, "Failed To rest Password");
+
+            }
+            return ResponseViewModel<bool>.Success(true, "Password reset successfully");
+        }
+        #endregion
+
     }
 }

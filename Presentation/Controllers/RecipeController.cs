@@ -65,6 +65,7 @@ namespace Presentation.Controllers
 
         }
         #endregion
+
         #region Get All Recipes
 
         [HttpGet]
@@ -97,6 +98,25 @@ namespace Presentation.Controllers
 
             return ResponseViewModel<bool>.Failure(result.Data, result.Message, ErrorCodeEnum.FailerDelete);
 
+        }
+        #endregion
+
+        #region Update Recipe
+        [HttpPut]
+        public async Task<ResponseViewModel<bool>> UpdateRecipe(int id,UpdateRecipeViewModel viewModel)
+        {
+            if (id != viewModel.id )
+            {
+                return ResponseViewModel<bool>.Failure(false, "ID mismatch ", ErrorCodeEnum.BadRequest);
+            }
+
+            // Map ViewModel to Dto
+            var mappedRecipe = viewModel.Map<UpdateRecipeDto>();
+
+          
+            var result = await _mediator.Send(new UpdateRecipeCommand(mappedRecipe));
+
+            return ResponseViewModel<bool>.Success(true, "recipe Updated Success");
         }
         #endregion
 
