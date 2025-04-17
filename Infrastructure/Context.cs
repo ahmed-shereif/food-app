@@ -12,6 +12,9 @@ namespace Infrastructure
 {
     public class Context : DbContext
     {
+        public Context() : base()
+        {
+        }
         public Context(DbContextOptions<Context> options) : base(options)
         {
 
@@ -19,11 +22,7 @@ namespace Infrastructure
 
        //DB Sets
         public DbSet<Recipe> Recipes { get; set; }
-
-
-
-
-     
+        public DbSet<RecipeUserFavorites> RecipeUserFavorites { get; set; }
         public DbSet<User> Users { get; set; }
     }
 }

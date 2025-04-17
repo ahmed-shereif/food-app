@@ -18,6 +18,7 @@ namespace Presentation
 {
     public class Program
     {
+
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -30,14 +31,13 @@ namespace Presentation
                            .EnableSensitiveDataLogging()
                         );
 
-            // Add services to the container.
-
             builder.Services.AddControllers();
-            builder.Services.AddDbContext<Context>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
-                   .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
-                   .EnableSensitiveDataLogging()
-                   .LogTo(log => Debug.WriteLine(log), LogLevel.Information));
+
+
+
+
+            
+
 
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -55,7 +55,6 @@ namespace Presentation
 
 
            // builder.Services.AddAutoMapper(typeof(Program));
-
             builder.Services.AddScoped(typeof(IGeneralRepository<>), typeof(GeneralRepository<>));
             builder.Services.AddScoped<IJwtProvider, JwtProvider>();
             builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();

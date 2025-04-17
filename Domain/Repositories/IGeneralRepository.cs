@@ -24,6 +24,8 @@ namespace Domain.Repositories
 
         //Update  
         bool Update(int id, T model);
+        //Update Include
+        void UpdateInclude(T entity, params string[] modifiedProperties);
 
 
         //Delete
