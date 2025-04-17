@@ -20,13 +20,35 @@ namespace Application.CQRS.Favorites.Commands
     public class AddRecipeToFavoritesHandler : IRequestHandler<AddRecipeToFavoritesCommand, ResponseViewModel<bool>>
     {
         private readonly IGeneralRepository<RecipeUserFavorites> _generalRepo;
-        public AddRecipeToFavoritesHandler(IGeneralRepository<RecipeUserFavorites> generalRepo)
+        private readonly IGeneralRepository<Recipe> _recipeRepo;
+        private readonly IGeneralRepository<User> _userRepo;
+
+        public AddRecipeToFavoritesHandler(IGeneralRepository<RecipeUserFavorites> generalRepo, IGeneralRepository<Recipe> recipeRepo, IGeneralRepository<User> userRepo)
         {
             _generalRepo = generalRepo;
+            _recipeRepo = recipeRepo;
+            _userRepo = userRepo;
         }
         public async Task<ResponseViewModel<bool>> Handle(AddRecipeToFavoritesCommand request, CancellationToken cancellationToken)
         {
-
+            var userExist = _userRepo.Get(x => x.Id == request.AddRecipeToFavoritesDTO.UserId).FirstOrDefault();
+            var recipeExist = _recipeRepo.Get(x => x.Id == request.AddRecipeToFavoritesDTO.RecipeId).FirstOrDefault();
+            if (userExist == null)
+            {
+                return ResponseViewModel<bool>.Failure(
+                    false,
+                    $"User not found.",
+                    ErrorCodeEnum.NotFound
+                );
+            }
+            if (recipeExist == null)
+            {
+                return ResponseViewModel<bool>.Failure(
+                    false,
+                    $"Recipe not found.",
+                    ErrorCodeEnum.NotFound
+                );
+            }
             RecipeUserFavorites recipeUserFavorites = request.AddRecipeToFavoritesDTO.Map<RecipeUserFavorites>();
             RecipeUserFavorites isAdded = await _generalRepo.AddAsync(recipeUserFavorites);
             if (isAdded != null)

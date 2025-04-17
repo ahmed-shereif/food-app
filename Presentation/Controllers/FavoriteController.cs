@@ -29,7 +29,7 @@ namespace Presentation.Controllers
 
             return _mediator.Send(new AddRecipeToFavoritesCommand(addRecipeToFavoritesViewModel.Map<AddRecipeToFavoritesDTO>())).Result;
         }
-        [HttpGet()]
+        [HttpGet]
         public ResponseViewModel<IEnumerable<GetRecipeUserFavoritesViewModel>> GetFavoriteRecipesByUserId(int userId)
         {
             var recipes = _mediator.Send(new GetFavoriteRecipesByUserIdQuery(userId)).Result.Data;
@@ -42,6 +42,11 @@ namespace Presentation.Controllers
 
             return ResponseViewModel<IEnumerable<GetRecipeUserFavoritesViewModel>>.Success(mappedRecipes, "Success");
         }
+        [HttpDelete]
+        public ResponseViewModel<bool> RemoveRecipeFromFavorites(int userId, int recipeId)
+        {
+            return _mediator.Send(new RemoveRecipeFromFavoritesCommand(userId, recipeId)).Result;
+        }
     }
-    
+
 }

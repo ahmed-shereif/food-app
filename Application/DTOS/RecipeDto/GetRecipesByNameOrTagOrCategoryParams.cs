@@ -2,6 +2,7 @@
 {
     public class GetRecipesByNameOrTagOrCategoryParams
     {
+
         public string? Name { get; set; }
         public string? Tag { get; set; }
         public string? Category { get; set; }
