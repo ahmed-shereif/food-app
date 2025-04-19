@@ -12,6 +12,8 @@ namespace Presentation.MappingProfile
             CreateMap<GetRecipeViewModel, GetRecipeDto>().ReverseMap();
             CreateMap<GetAllRecipesViewModel, GetAllRecipesDto>().ReverseMap();
             CreateMap<UpdateRecipeDto,UpdateRecipeViewModel>().ReverseMap();
+            CreateMap<GetRecipesByNameOrTagOrCategoryParamsViewModel, GetRecipesByNameOrTagOrCategoryParams>().ReverseMap();
+            CreateMap<GetRecipesByNameOrTagOrCategoryDTO, GetRecipesByNameOrTagOrCategoryViewModel>().ReverseMap();
 
         }
     }

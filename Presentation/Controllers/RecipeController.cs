@@ -4,15 +4,19 @@ using Application.CQRS.Recipes.Queries;
 using Application.DTOS.RecipeDto;
 using Application.Helpers;
 using Application.Helpers.MappingProfile;
+using AutoMapper.Features;
 using Azure;
 using Domain.Enums;
 using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
+
 using Microsoft.AspNetCore.Mvc;
 using Presentation.ViewModels.RecipeViewModel;
 using System.Threading.Tasks;
+
+
 
 namespace Presentation.Controllers
 {
@@ -45,7 +49,7 @@ namespace Presentation.Controllers
 
             return ResponseViewModel<bool>.Success(true, "Recipe added successfully.");
         }
-
+        
         #endregion
 
         #region Get Recipe By Id 
@@ -62,6 +66,24 @@ namespace Presentation.Controllers
                 return ResponseViewModel<GetRecipeViewModel>.Failure(mapedRecipe, "cannot find recipe", ErrorCodeEnum.NotFound);
 
             return ResponseViewModel<GetRecipeViewModel>.Success(mapedRecipe, "Success");
+
+        }
+
+
+        #endregion
+        #region Get Recipes by Name, Tag or Category
+        [HttpGet]
+        public ResponseViewModel<IEnumerable<GetRecipesByNameOrTagOrCategoryViewModel>> GetRecipesByNameOrTagOrCategory([FromQuery] GetRecipesByNameOrTagOrCategoryParamsViewModel getRecipesByNameOrTagOrCategoryViewModel)
+        {
+            var recipes = _mediator.Send(new GetRecipesByNameOrTagOrCategoryQuery(getRecipesByNameOrTagOrCategoryViewModel.Map<GetRecipesByNameOrTagOrCategoryParams>())).Result.Data;
+            IEnumerable<GetRecipesByNameOrTagOrCategoryViewModel> mappedRecipes = recipes.AsQueryable().Project<GetRecipesByNameOrTagOrCategoryViewModel>();
+
+            if (mappedRecipes is null)
+            {
+                return ResponseViewModel<IEnumerable<GetRecipesByNameOrTagOrCategoryViewModel>>.Failure(null, "Recipes not found", ErrorCodeEnum.NotFound);
+            }
+
+            return ResponseViewModel<IEnumerable<GetRecipesByNameOrTagOrCategoryViewModel>>.Success(mappedRecipes, "Success");
 
         }
         #endregion
