@@ -49,6 +49,15 @@ namespace Application.CQRS.Favorites.Commands
                     ErrorCodeEnum.NotFound
                 );
             }
+            var recipeUserFavoritesExist = await _generalRepo.GetAsyncAny(x => x.RecipeId == request.AddRecipeToFavoritesDTO.RecipeId && x.UserId == request.AddRecipeToFavoritesDTO.UserId);
+            if (recipeUserFavoritesExist)
+            {
+                return ResponseViewModel<bool>.Failure(
+                    false,
+                    $"Recipe already exists in favorites.",
+                    ErrorCodeEnum.AlreadyExist
+                );
+            }
             RecipeUserFavorites recipeUserFavorites = request.AddRecipeToFavoritesDTO.Map<RecipeUserFavorites>();
             RecipeUserFavorites isAdded = await _generalRepo.AddAsync(recipeUserFavorites);
             if (isAdded != null)

@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Models
 {
-    public class RecipeUserFavorites : BaseModel
+    
+
+    public class RecipeUserFavorites : BaseModel    
     {
         public int RecipeId { get; set; }
         [ForeignKey("RecipeId")]
