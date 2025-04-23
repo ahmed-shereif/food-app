@@ -23,7 +23,7 @@ namespace Application.CQRS.Favorites.Commands
         public async Task<ResponseViewModel<bool>> Handle(RemoveRecipeFromFavoritesCommand request, CancellationToken cancellationToken)
         {
             
-            var recipeUserFavorites = await _generalRepo.Get(x => x.UserId == request.userId && x.RecipeId == request.recipeId ).AsTracking().FirstOrDefaultAsync();
+            var recipeUserFavorites = await _generalRepo.Get(x => x.UserId == request.userId && x.RecipeId == request.recipeId ).FirstOrDefaultAsync();
             if (recipeUserFavorites == null)
             {
                 return ResponseViewModel<bool>.Failure(
@@ -32,7 +32,7 @@ namespace Application.CQRS.Favorites.Commands
                     ErrorCodeEnum.NotFound
                 );
             }
-            _generalRepo.Delete(recipeUserFavorites.Id);
+            await _generalRepo.Delete(recipeUserFavorites.Id);
             var result = await _generalRepo.SaveChangesAsync();
             if (result > 0)
             {

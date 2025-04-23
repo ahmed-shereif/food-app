@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,7 +21,13 @@ namespace Infrastructure
 
         }
 
-       //DB Sets
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<RecipeUserFavorites>().HasQueryFilter(b => !b.IsDeleted);
+
+        }
+        //DB Sets
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<RecipeUserFavorites> RecipeUserFavorites { get; set; }
         public DbSet<User> Users { get; set; }

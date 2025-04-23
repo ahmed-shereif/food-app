@@ -28,6 +28,7 @@ namespace Presentation
                         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
                            .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
                            .LogTo(log => Debug.WriteLine(log), LogLevel.Information)
+
                            .EnableSensitiveDataLogging()
                         );
 
@@ -51,7 +52,7 @@ namespace Presentation
             builder.Services.ConfigureOptions<JwtOptionsSetup>();
 
            
-          
+         
 
 
            // builder.Services.AddAutoMapper(typeof(Program));
@@ -78,8 +79,8 @@ namespace Presentation
 
 
             // Add the global exception middleware
-            app.UseMiddleware<GlobalExceptionMiddleware>();
-            app.UseMiddleware<TransactionMiddleware>();
+           // app.UseMiddleware<GlobalExceptionMiddleware>();
+            //  app.UseMiddleware<TransactionMiddleware>();
 
             AutoMapperService.Mapper = app.Services.GetService<IMapper>();
 
