@@ -58,11 +58,11 @@ namespace Presentation.Controllers
         }
 
 
-        #region Forget Password
+        #region GetLink
 
        // [Authorize]
-        [HttpPost("forget-password")]
-        public async Task<ResponseViewModel<string>> ForgetPassword(string Email)
+        [HttpPost("Get-Link")]
+        public async Task<ResponseViewModel<string>> GetLink(string Email)
         {
 
             if (string.IsNullOrWhiteSpace(Email))
@@ -75,7 +75,7 @@ namespace Presentation.Controllers
 
 
 
-            var result = await _mediator.Send(new ForgetPasswordCommand(Email));
+            var result = await _mediator.Send(new GetLinkCommand(Email));
 
 
             if (result.Data == null)
@@ -91,6 +91,38 @@ namespace Presentation.Controllers
 
         #endregion
 
+        #region Verify otp
+
+        [HttpPost("verify-otp")]
+        public async Task<ResponseViewModel<bool>> VerifyOtp(VerifyOtpCommand command)
+        {
+            var result = await _mediator.Send(command);
+
+            if (!result.IsSuccess)
+                return ResponseViewModel<bool>.Failure(false, "Not Verfied");
+
+            return ResponseViewModel<bool>.Success(true, "Verified");
+        }
+
+        #endregion
+
+
+        #region Forget Password
+        [HttpPost("forgot-password")]
+        public async Task<ResponseViewModel<string>> ForgotPassword(GetLinkCommand command)
+        {
+            var result = await _mediator.Send(command);
+
+            if (result.Data == null)
+            {
+                return ResponseViewModel<string>.Failure(null, "Fail");
+            }
+
+            return ResponseViewModel<string>.Success(result.Data, "");
+        }
+
+        #endregion
+
 
 
         #region Reset Password
@@ -99,7 +131,7 @@ namespace Presentation.Controllers
         public async Task<ResponseViewModel<bool>> ResetPassword( ResetPasswordViewModel model)
         {
             var result = await _mediator.Send(new ResetPasswordCommand(model.Email, model.OTP, model.NewPassword));
-            if (result==null)
+            if (result == null)
             {
                 return ResponseViewModel<bool>.Failure(false, "Failed To rest Password");
 
@@ -108,5 +140,7 @@ namespace Presentation.Controllers
         }
         #endregion
 
+
+       
     }
 }

@@ -4,6 +4,7 @@ using Domain.Models;
 using Domain.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using OtpNet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,18 +23,41 @@ namespace Application.CQRS.Users.Commands
         {
             _userRepository = userRepository;
         }
+        public string GetSecretKey(string Email)
+        {
+            return _userRepository.Get(x => x.Email == Email)
+                 .Select(X => X.OTPSecretKey).
+                 FirstOrDefault();
 
+
+        }
         public async Task<ResponseViewModel<bool>> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.Get(x => x.Email == request.Email ).FirstOrDefaultAsync();
+            var user = await _userRepository.Get(x => x.Email == request.Email).FirstOrDefaultAsync();
+
+            //var Base32Key = GetSecretKey(request.Email);
+            //if (string.IsNullOrEmpty(Base32Key))
+            //{
+
+            //    var otpSecretKey = KeyGeneration.GenerateRandomKey(20);
+            //    Base32Key = Base32Encoding.ToString(otpSecretKey);
+            //    user.OTPSecretKey = Base32Key;
+            //    _userRepository.UpdateInclude(user, nameof(user.OTPSecretKey));
+            //    await _userRepository.SaveChangesAsync();
+
+            //}
+
+
             if (user == null || user.OTPSecretKey != request.OTP)
                 return ResponseViewModel<bool>.Failure(false, "Invalid OTP or email", ErrorCodeEnum.NotFound);
 
             user.Password = BCrypt.Net.BCrypt.HashPassword(request.NewPassword); 
-            user.OTPSecretKey = null;
+     
 
-            _userRepository.UpdateInclude(user, nameof(user.Password), nameof(user.OTPSecretKey));
+            
+            _userRepository.UpdateInclude(user, nameof(user.Password));
             await _userRepository.SaveChangesAsync();
+     
 
             return ResponseViewModel<bool>.Success(true, "Password reset successfully");
         }
