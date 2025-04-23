@@ -41,10 +41,10 @@ namespace Application.CQRS.Recipes.Queries
             {
                 recipes = recipes.Where(r => r.Tag == _params.Tag);
             }
-            if (!_params.Category.IsNullOrEmpty())
-            {
-                recipes = recipes.Where(r => r.Category == _params.Category);
-            }
+            //if (!_params.Category.IsNullOrEmpty())
+            //{
+            //    //recipes = recipes.Where(r => r.Category == _params.Category);
+            //}
             var mappedRecipes = await recipes.Project<GetRecipesByNameOrTagOrCategoryDTO>().ToListAsync();
             if (mappedRecipes is null || mappedRecipes.Count() == 0)
             {

@@ -78,7 +78,7 @@ namespace Presentation
             app.UseMiddleware<GlobalExceptionMiddleware>();
             app.UseMiddleware<TransactionMiddleware>();
 
-            AutoMapperService.Mapper = app.Services.GetService<IMapper>();
+                AutoMapperService.Mapper = app.Services.GetService<IMapper>();
 
 
 
