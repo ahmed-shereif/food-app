@@ -40,8 +40,8 @@ namespace Application.CQRS.Recipes.Commands
            nameof(Recipe.ImageUrl),
            nameof(Recipe.Price),
            nameof(Recipe.Description),
-           nameof(Recipe.Tag),
-           nameof(Recipe.Category) 
+           nameof(Recipe.Tag)
+           //nameof(Recipe.Category) 
        );
             await _generalRepository.SaveChangesAsync();
 
