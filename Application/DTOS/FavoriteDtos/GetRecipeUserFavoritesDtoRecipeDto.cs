@@ -1,6 +1,6 @@
-﻿namespace Application.DTOS.RecipeDto
+﻿namespace Application.DTOS.FavoriteDtos
 {
-    public class GetRecipesByNameOrTagOrCategoryDTO
+    public class GetRecipeUserFavoritesDtoRecipeDto
     {
         public int Id { get; set; }
         public string Name { get; set; }

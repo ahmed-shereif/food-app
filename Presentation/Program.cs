@@ -18,6 +18,7 @@ namespace Presentation
 {
     public class Program
     {
+
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -27,12 +28,16 @@ namespace Presentation
                         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
                            .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
                            .LogTo(log => Debug.WriteLine(log), LogLevel.Information)
+
                            .EnableSensitiveDataLogging()
                         );
 
             builder.Services.AddControllers();
 
 
+
+
+            
 
 
 
@@ -47,11 +52,10 @@ namespace Presentation
             builder.Services.ConfigureOptions<JwtOptionsSetup>();
 
            
-          
+         
 
 
            // builder.Services.AddAutoMapper(typeof(Program));
-
             builder.Services.AddScoped(typeof(IGeneralRepository<>), typeof(GeneralRepository<>));
             builder.Services.AddScoped<IJwtProvider, JwtProvider>();
             builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
@@ -75,8 +79,8 @@ namespace Presentation
 
 
             // Add the global exception middleware
-            app.UseMiddleware<GlobalExceptionMiddleware>();
-            app.UseMiddleware<TransactionMiddleware>();
+           app.UseMiddleware<GlobalExceptionMiddleware>();
+           app.UseMiddleware<TransactionMiddleware>();
 
             AutoMapperService.Mapper = app.Services.GetService<IMapper>();
 

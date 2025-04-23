@@ -11,12 +11,9 @@ using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
-
 using Microsoft.AspNetCore.Mvc;
 using Presentation.ViewModels.RecipeViewModel;
 using System.Threading.Tasks;
-
-
 
 namespace Presentation.Controllers
 {
@@ -49,7 +46,7 @@ namespace Presentation.Controllers
 
             return ResponseViewModel<bool>.Success(true, "Recipe added successfully.");
         }
-        
+
         #endregion
 
         #region Get Recipe By Id 
@@ -87,7 +84,6 @@ namespace Presentation.Controllers
 
         }
         #endregion
-
         #region Get All Recipes
 
         [HttpGet]
@@ -122,6 +118,8 @@ namespace Presentation.Controllers
 
         }
         #endregion
+
+      
 
         #region Update Recipe
         [HttpPut]
