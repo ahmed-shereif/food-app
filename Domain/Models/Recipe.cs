@@ -13,6 +13,8 @@ namespace Domain.Models
         public decimal Price { get; set; }
         public string Description { get; set; }
         public string Tag { get; set; }
-        //public string Category { get; set; }
+        public string Category { get; set; }
+        
+        public ICollection<User> Users { get; set; }
     }
 }

@@ -16,6 +16,7 @@ namespace Domain.Models
         public string Phone { get; set; }
         public string? OTPSecretKey { get; set; } 
         public Role Role { get; set; }
+        public ICollection<Recipe> Recipes { get; set; }
 
     }
 }
