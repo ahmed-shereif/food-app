@@ -79,8 +79,8 @@ namespace Presentation
 
 
             // Add the global exception middleware
-           // app.UseMiddleware<GlobalExceptionMiddleware>();
-            //  app.UseMiddleware<TransactionMiddleware>();
+           app.UseMiddleware<GlobalExceptionMiddleware>();
+           app.UseMiddleware<TransactionMiddleware>();
 
             AutoMapperService.Mapper = app.Services.GetService<IMapper>();
 
