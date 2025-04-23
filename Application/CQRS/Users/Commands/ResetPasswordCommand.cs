@@ -35,18 +35,7 @@ namespace Application.CQRS.Users.Commands
         {
             var user = await _userRepository.Get(x => x.Email == request.Email).FirstOrDefaultAsync();
 
-            //var Base32Key = GetSecretKey(request.Email);
-            //if (string.IsNullOrEmpty(Base32Key))
-            //{
-
-            //    var otpSecretKey = KeyGeneration.GenerateRandomKey(20);
-            //    Base32Key = Base32Encoding.ToString(otpSecretKey);
-            //    user.OTPSecretKey = Base32Key;
-            //    _userRepository.UpdateInclude(user, nameof(user.OTPSecretKey));
-            //    await _userRepository.SaveChangesAsync();
-
-            //}
-
+          
 
             if (user == null || user.OTPSecretKey != request.OTP)
                 return ResponseViewModel<bool>.Failure(false, "Invalid OTP or email", ErrorCodeEnum.NotFound);
