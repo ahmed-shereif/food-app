@@ -1,8 +1,10 @@
-﻿using Application.CQRS.Recipes.Commands;
+﻿
+using Application.CQRS.Recipes.Commands;
 using Application.CQRS.Recipes.Queries;
 using Application.DTOS.RecipeDto;
 using Application.Helpers;
 using Application.Helpers.MappingProfile;
+using AutoMapper.Features;
 using Azure;
 using Domain.Enums;
 using Domain.Models;
@@ -26,25 +28,6 @@ namespace Presentation.Controllers
             _mediator = mediator;
         }
 
-        //[HttpPost]
-        //public async Task<ResponseViewModel<AddRecipeViewModel>> AddRecipe([FromBody] AddRecipeDto recipeDto)
-        //{
-        //    var result = await _mediator.Send(new AddRecipeCommand(recipeDto));
-
-        //    if (!result.IsSuccess)
-        //        return 
-        //            ResponseViewModel<AddRecipeViewModel>.Failure(
-        //                null,
-        //                result.Message,
-        //                result.StatusCode);
-
-        //    // Map result.Data (AddRecipeDto) to AddRecipeViewModel
-        //  //  var viewModel = AutoMapperService.Mapper.Map<AddRecipeViewModel>(result.Data);
-        //  var viewModel = recipeDto.Map<AddRecipeViewModel>();
-
-
-        //    return ResponseViewModel<AddRecipeViewModel>.Success(viewModel, "Recipe added successfully.");
-        //}
         #region Add Recipe
         [HttpPost]
         public async Task<ResponseViewModel<bool>> AddRecipe([FromBody] AddRecipeViewModel recipeViewModel)
@@ -82,6 +65,24 @@ namespace Presentation.Controllers
             return ResponseViewModel<GetRecipeViewModel>.Success(mapedRecipe, "Success");
 
         }
+
+
+        #endregion
+        #region Get Recipes by Name, Tag or Category
+        [HttpGet]
+        public ResponseViewModel<IEnumerable<GetRecipesByNameOrTagOrCategoryViewModel>> GetRecipesByNameOrTagOrCategory([FromQuery] GetRecipesByNameOrTagOrCategoryParamsViewModel getRecipesByNameOrTagOrCategoryViewModel)
+        {
+            var recipes = _mediator.Send(new GetRecipesByNameOrTagOrCategoryQuery(getRecipesByNameOrTagOrCategoryViewModel.Map<GetRecipesByNameOrTagOrCategoryParams>())).Result.Data;
+            IEnumerable<GetRecipesByNameOrTagOrCategoryViewModel> mappedRecipes = recipes.AsQueryable().Project<GetRecipesByNameOrTagOrCategoryViewModel>();
+
+            if (mappedRecipes is null)
+            {
+                return ResponseViewModel<IEnumerable<GetRecipesByNameOrTagOrCategoryViewModel>>.Failure(null, "Recipes not found", ErrorCodeEnum.NotFound);
+            }
+
+            return ResponseViewModel<IEnumerable<GetRecipesByNameOrTagOrCategoryViewModel>>.Success(mappedRecipes, "Success");
+
+        }
         #endregion
         #region Get All Recipes
 
@@ -115,6 +116,27 @@ namespace Presentation.Controllers
 
             return ResponseViewModel<bool>.Failure(result.Data, result.Message, ErrorCodeEnum.FailerDelete);
 
+        }
+        #endregion
+
+      
+
+        #region Update Recipe
+        [HttpPut]
+        public async Task<ResponseViewModel<bool>> UpdateRecipe(int id,UpdateRecipeViewModel viewModel)
+        {
+            if (id != viewModel.id )
+            {
+                return ResponseViewModel<bool>.Failure(false, "ID mismatch ", ErrorCodeEnum.BadRequest);
+            }
+
+            // Map ViewModel to Dto
+            var mappedRecipe = viewModel.Map<UpdateRecipeDto>();
+
+          
+            var result = await _mediator.Send(new UpdateRecipeCommand(mappedRecipe));
+
+            return ResponseViewModel<bool>.Success(true, "recipe Updated Success");
         }
         #endregion
 
