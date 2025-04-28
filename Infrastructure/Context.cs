@@ -19,6 +19,7 @@ namespace Infrastructure
 
        //DB Sets
         public DbSet<Recipe> Recipes { get; set; }
+        public DbSet<EmailVerificationToken> EmailVerificationTokens { get; set; }
 
 
 

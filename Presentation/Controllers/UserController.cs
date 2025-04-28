@@ -13,6 +13,10 @@ using Application.Helpers;
 using Presentation.ViewModels.UserViewModels;
 using Application.CQRS.Users.Commands;
 using Microsoft.AspNetCore.Authorization;
+using Application.CQRS.RegistrationUserOrchestrator;
+using Application.ViewModels.UserViewModels;
+using Application.CQRS.Users.VerifyEmail;
+using Application.CQRS.VerifyEmailOrchestratort;
 
 namespace Presentation.Controllers
 {
@@ -26,20 +30,47 @@ namespace Presentation.Controllers
         {
             _mediator = mediator;
         }
+        //[HttpPost]
+        //[Route("Register")]
+        //public async Task<ResponseViewModel<UserViewModel>> Register(UserViewModel createUser)
+        //{
+        //    if(!ModelState.IsValid)
+        //    {
+        //     return   ResponseViewModel<UserViewModel>.Failure(createUser, "ssss", ErrorCodeEnum.AlreadyExist);
+        //    }
+        //    var MappingDto = createUser.Map<CreateUserDto>();
+        //    var result = await _mediator.Send(new RegistrationCommand(MappingDto));
+        //    if (!result.IsSuccess)
+        //       return ResponseViewModel<UserViewModel>.Failure(createUser, "ssss", ErrorCodeEnum.AlreadyExist);
+        //    return ResponseViewModel<UserViewModel>.Success(createUser, "sasasasa");
+        //    ;
+        //} 
+
         [HttpPost]
         [Route("Register")]
 
-        public async Task<ResponseViewModel<UserViewModel>> Register(UserViewModel createUser)
+        public async Task<ResponseViewModel<bool>> Register(RegistratioUserOrchestratorViewModel RegistratioUserOrchestratorViewModel)
         {
             if(!ModelState.IsValid)
             {
-             return   ResponseViewModel<UserViewModel>.Failure(createUser, "ssss", ErrorCodeEnum.AlreadyExist);
+             return   ResponseViewModel<bool>.Failure(false, "complete field", ErrorCodeEnum.AlreadyExist);
             }
-            var MappingDto = createUser.Map<CreateUserDto>();
-            var result = await _mediator.Send(new RegistrationCommand(MappingDto));
+            var MappingDto = RegistratioUserOrchestratorViewModel.Map<CreateUserViewModel>();
+            var result = await _mediator.Send(new RegistrationUserOrchestratorCommand(MappingDto));
             if (!result.IsSuccess)
-               return ResponseViewModel<UserViewModel>.Failure(createUser, "ssss", ErrorCodeEnum.AlreadyExist);
-            return ResponseViewModel<UserViewModel>.Success(createUser, "sasasasa");
+               return ResponseViewModel<bool>.Failure(false, "ssss", ErrorCodeEnum.AlreadyExist);
+            return ResponseViewModel<bool>.Success(true, "sasasasa");
+            ;
+        }  
+        [HttpGet("VerifyEmail")]
+
+        public async Task<ResponseViewModel<bool>> VerifyEmail([FromQuery]Guid token)
+        {
+       
+            var result = await _mediator.Send(new VerifyEmailOrchestratortCommand(token));
+            if (!result.IsSuccess)
+               return ResponseViewModel<bool>.Failure(false, "Email Verfication Expierd", ErrorCodeEnum.AlreadyExist);
+            return ResponseViewModel<bool>.Success(true, "successfull Registration");
             ;
         }
         [HttpPost]

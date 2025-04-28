@@ -19,7 +19,7 @@ namespace Domain.Repositories
 
         //Get By Id 
         Task<T> GetByIdAsync(int id);
-
+        Task<T> GetByIdWithTracking(int id);
         Task<bool> GetAsyncAny(Expression<Func<T, bool>> predicate);
 
         //Update  
