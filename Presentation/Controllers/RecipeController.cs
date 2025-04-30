@@ -4,6 +4,7 @@ using Application.CQRS.Recipes.Queries;
 using Application.DTOS.RecipeDto;
 using Application.Helpers;
 using Application.Helpers.MappingProfile;
+using AutoMapper.Features;
 using Azure;
 using Domain.Enums;
 using Domain.Models;
@@ -64,8 +65,25 @@ namespace Presentation.Controllers
             return ResponseViewModel<GetRecipeViewModel>.Success(mapedRecipe, "Success");
 
         }
-        #endregion
 
+
+        #endregion
+        #region Get Recipes by Name, Tag or Category
+        [HttpGet]
+        public ResponseViewModel<IEnumerable<GetRecipesByNameOrTagOrCategoryViewModel>> GetRecipesByNameOrTagOrCategory([FromQuery] GetRecipesByNameOrTagOrCategoryParamsViewModel getRecipesByNameOrTagOrCategoryViewModel)
+        {
+            var recipes = _mediator.Send(new GetRecipesByNameOrTagOrCategoryQuery(getRecipesByNameOrTagOrCategoryViewModel.Map<GetRecipesByNameOrTagOrCategoryParams>())).Result.Data;
+            IEnumerable<GetRecipesByNameOrTagOrCategoryViewModel> mappedRecipes = recipes.AsQueryable().Project<GetRecipesByNameOrTagOrCategoryViewModel>();
+
+            if (mappedRecipes is null)
+            {
+                return ResponseViewModel<IEnumerable<GetRecipesByNameOrTagOrCategoryViewModel>>.Failure(null, "Recipes not found", ErrorCodeEnum.NotFound);
+            }
+
+            return ResponseViewModel<IEnumerable<GetRecipesByNameOrTagOrCategoryViewModel>>.Success(mappedRecipes, "Success");
+
+        }
+        #endregion
         #region Get All Recipes
 
         [HttpGet]
@@ -100,6 +118,8 @@ namespace Presentation.Controllers
 
         }
         #endregion
+
+      
 
         #region Update Recipe
         [HttpPut]

@@ -11,7 +11,7 @@ namespace Application.ViewModels.UserViewModels
     public class EmailVerificationTokenViewModel
     {
         public DateTime CreatedAt { get; set; } 
-        public DateTime ExpirationDate { get; set; } = DateTime.UtcNow.AddMinutes(1);
+        public DateTime ExpirationDate { get; set; } = DateTime.UtcNow.AddHours(1);
                         
         public int UserId { get; set; }
                   

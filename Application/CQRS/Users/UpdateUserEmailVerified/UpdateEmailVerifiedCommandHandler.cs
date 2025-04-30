@@ -35,7 +35,7 @@ namespace Application.CQRS.Users.UpdateUserEmailVerified
                 _generalRepository.UpdateInclude(updateUser,nameof(User.EmailVerified));
               var reslt =await _generalRepository.SaveChangesAsync();
             // Check if the update was successful
-            if(reslt > 0)
+            if(reslt < 0)
                 return ResponseViewModel<bool>.Failure(false, "user not updated", ErrorCodeEnum.FailerUpdated);
 
             return ResponseViewModel<bool>.Success(true, "user updated successfully");

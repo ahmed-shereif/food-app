@@ -18,6 +18,7 @@ namespace Domain.Models
 
         public bool EmailVerified { get; set; } = false;
         public Role Role { get; set; }
+        public ICollection<Recipe> Recipes { get; set; }
 
     }
 }

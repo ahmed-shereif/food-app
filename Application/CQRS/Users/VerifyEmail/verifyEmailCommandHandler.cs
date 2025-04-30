@@ -26,9 +26,9 @@ namespace Application.CQRS.Users.VerifyEmail
             EmailVerificationToken?  token = await _EmailVerificationgeneralRepository
                                                     .Get(x => x.Token == request.TokenId)
                                                      .Select(x => new EmailVerificationToken
-                                                     {  Id = x.Id,
+                                                     {   Id = x.Id,
                                                          ExpirationDate = x.ExpirationDate,
-                                                         UserId = x.UserId
+                                                         UserId = x.UserId 
                                                      }).FirstOrDefaultAsync();
             if (token is null || token.ExpirationDate < DateTime.UtcNow )
          //   if (token is null || token.ExpirationDate < DateTime.UtcNow || token.User.EmailVerified )
