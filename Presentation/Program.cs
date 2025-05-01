@@ -12,7 +12,11 @@ using Microsoft.EntityFrameworkCore;
 using Presentation.MiddleWares;
 using Presentation.OptionsSetup;
 using System.Diagnostics;
+using System.Net.Mail;
+using System.Net;
 using System.Reflection.Metadata;
+using Infrastructure.Services;
+using Application.Helpers;
 
 namespace Presentation
 {
@@ -31,7 +35,8 @@ namespace Presentation
 
                            .EnableSensitiveDataLogging()
                         );
-
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddScoped<EmailVerificationLinkFactory>();
             builder.Services.AddControllers();
 
 
@@ -58,6 +63,7 @@ namespace Presentation
            // builder.Services.AddAutoMapper(typeof(Program));
             builder.Services.AddScoped(typeof(IGeneralRepository<>), typeof(GeneralRepository<>));
             builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
 
 
@@ -70,9 +76,15 @@ namespace Presentation
   
 
              builder.Services.AddScoped(typeof(IGeneralRepository<>), typeof(GeneralRepository<>));
-         
 
-      
+            builder.Services.AddFluentEmail("ahmed1996sherif@gmail.com")
+    .AddSmtpSender(new SmtpClient("smtp.gmail.com", 587)
+    {
+        EnableSsl = true,
+        UseDefaultCredentials = false,
+        Credentials = new NetworkCredential("ahmed1996sherif@gmail.com", "lcbp gxrq yhbl yqxg")
+    });
+
 
             var app = builder.Build();
 

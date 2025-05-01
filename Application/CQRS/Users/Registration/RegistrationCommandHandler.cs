@@ -5,6 +5,7 @@ using Domain.Enums;
 using Domain.Models;
 using Domain.Repositories;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,11 +25,11 @@ namespace Application.CQRS.Users.Registration
 
         public async Task<ResponseViewModel<CreateUserDto>> Handle(RegistrationCommand request, CancellationToken cancellationToken)
         {
-            var user = _generalRepository.Get(x => x.Email == request.user.Email);
+            var user = await _generalRepository.Get(x => x.Email == request.user.Email).FirstOrDefaultAsync();
 
             if (user != null)
             {
-                ResponseViewModel<CreateUserDto>.Failure(null, "ssss", ErrorCodeEnum.AlreadyExist);
+               return ResponseViewModel<CreateUserDto>.Failure(null, "ssss", ErrorCodeEnum.AlreadyExist);
             };
             //   var hashingPassword = new passwordHasher<User>.PasswordHasher();
             var mapp = request.user;
@@ -37,9 +38,10 @@ namespace Application.CQRS.Users.Registration
 
             var CreateNewUser = await _generalRepository.AddAsync(MappingToUser);
             var result = await _generalRepository.SaveChangesAsync();
+            var mappingToCreateUserDto = CreateNewUser.Map<CreateUserDto>();
             if (result > 0)
             {
-              return  ResponseViewModel<CreateUserDto>.Success(request.user, "sasasasa");
+              return  ResponseViewModel<CreateUserDto>.Success(mappingToCreateUserDto, "sasasasa");
             }
             else
             {
