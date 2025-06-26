@@ -73,13 +73,13 @@ namespace Presentation.Controllers
         public ResponseViewModel<IEnumerable<GetRecipesByNameOrTagOrCategoryViewModel>> GetRecipesByNameOrTagOrCategory([FromQuery] GetRecipesByNameOrTagOrCategoryParamsViewModel getRecipesByNameOrTagOrCategoryViewModel)
         {
             var recipes = _mediator.Send(new GetRecipesByNameOrTagOrCategoryQuery(getRecipesByNameOrTagOrCategoryViewModel.Map<GetRecipesByNameOrTagOrCategoryParams>())).Result.Data;
-            IEnumerable<GetRecipesByNameOrTagOrCategoryViewModel> mappedRecipes = recipes.AsQueryable().Project<GetRecipesByNameOrTagOrCategoryViewModel>();
 
-            if (mappedRecipes is null)
+            if (recipes is null)
             {
                 return ResponseViewModel<IEnumerable<GetRecipesByNameOrTagOrCategoryViewModel>>.Failure(null, "Recipes not found", ErrorCodeEnum.NotFound);
             }
 
+            IEnumerable<GetRecipesByNameOrTagOrCategoryViewModel> mappedRecipes = recipes.AsQueryable().Project<GetRecipesByNameOrTagOrCategoryViewModel>();
             return ResponseViewModel<IEnumerable<GetRecipesByNameOrTagOrCategoryViewModel>>.Success(mappedRecipes, "Success");
 
         }
